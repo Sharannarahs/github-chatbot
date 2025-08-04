@@ -1,4 +1,4 @@
-# 🔍 GitHub AI Commit Analyzer – Powered by T3 Stack
+# 🔍 GitHub AI Analyzer – Powered by T3 Stack
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app` and extended with powerful AI features to help developers interact with their GitHub repositories more intelligently.
 
