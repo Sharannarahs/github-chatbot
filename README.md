@@ -22,7 +22,7 @@ This application allows users to:
 | Feature              | Tech Used                                                                 |
 |----------------------|---------------------------------------------------------------------------|
 | Framework            | [Next.js](https://nextjs.org)                                             |
-| Auth & AuthZ         | [Clerk](https://clerk.dev)                                                |
+| Auth & Auth          | [Clerk](https://clerk.dev)                                                |
 | AI + RAG             | [Gemini AI](https://ai.google.dev) + [LangChain](https://www.langchain.com) |
 | Database             | [Neon](https://neon.tech) (PostgreSQL)                                    |
 | ORM                  | [Prisma](https://prisma.io)                                               |
