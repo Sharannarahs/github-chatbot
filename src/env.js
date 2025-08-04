@@ -42,3 +42,12 @@ export const env = createEnv({
    */
   emptyStringAsUndefined: true,
 });
+
+
+/*
+
+@t3-oss/env-nextjs: A wrapper utility from the T3 stack that helps validate environment variables in both server and client contexts.
+
+zod: A schema validation library used here to define what each environment variable should look like.
+
+*/

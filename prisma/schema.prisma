@@ -3,18 +3,124 @@
 
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url      = env("DATABASE_URL") // IN .ENV
+    extensions = [vector]
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model User {
+    id        String   @id @default(cuid()) // PK CUCID Automatically generates a unique string ID like ckv8k3pzz000001l5e7sm0k2q 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([name])
+    imageUrl  String? // All have a ? → meaning they are optional (can be null)
+    firstName String?
+    lastName  String?
+
+    emailAddress String @unique
+
+    credits Int @default(150) // 150 FILES CAN BE UPLOADED FROM GITHUB BY DEFAULT
+
+    userToProjects UserToProject[]
+
+    qusetionsAsked Question[] // One user can ask many questions
+
+    stripeTransactions StripeTransaction[]
+}
+
+model Project {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name      String
+    githubUrl String
+
+    deletedAt DateTime?
+
+    userToProjects UserToProject[]
+    commits        Commit[] // One project can have many commits
+    sourceCodeEmbeddings SourceCodeEmbedding[]
+
+    savedQuestions Question[] // One project can have many saved questions
+    
+}
+
+model UserToProject {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId    String
+    projectId String
+    user      User     @relation(fields: [userId], references: [id])
+    project   Project  @relation(fields: [projectId], references: [id])
+
+
+    @@unique([userId, projectId]) // ensure unique user-project pairs
+}
+
+model SourceCodeEmbedding {
+    id String @id @default(cuid())
+
+    summaryEmbedding Unsupported("vector(768)")? // 768 dimensions because particular embedding model geminiAI provides
+    sourceCode       String
+    fileName         String
+    summary          String
+
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id]) // all fields belong to one project
+
+
+
+}
+
+model StripeTransaction {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId String
+    user User @relation(fields: [userId], references: [id])
+    credits Int
+}
+
+model Question {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    question  String
+    answer    String
+
+    fileReferences Json?
+
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id])
+    
+    userId    String
+    user      User    @relation(fields: [userId], references: [id])
+}
+
+model Commit {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    projectId String
+    project   Project  @relation(fields: [projectId], references: [id])
+
+    commitMessage      String
+    commitHash         String 
+    commitAuthorName   String
+    commitAuthorAvatar String
+    commitDate         DateTime
+
+    // ai summary
+    summary            String
+
 }
